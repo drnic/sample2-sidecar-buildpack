@@ -21,6 +21,7 @@ class AppServer < Sinatra::Base
     else
       {"error": "error connecting to local config-server"}.to_json
     end
+    STDOUT.flush
   end
 
   run! if app_file == $0
