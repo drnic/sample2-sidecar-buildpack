@@ -16,6 +16,9 @@ This demonstration of sidecars requires a Cloud Foundry running [capi-release](h
 cf v3-create-app app-using-config-server
 cf v3-apply-manifest -f fixtures/rubyapp/manifest.yml
 cf v3-push app-using-config-server -p fixtures/rubyapp
+...
+   -----> Installing config-server v0.0.1
+...
 ```
 
 If you view the logs you'll see the sidecar's output and the ruby app's output:
