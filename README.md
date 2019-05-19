@@ -1,8 +1,8 @@
-# Sample #1 - Supply buildpack for Cloud Foundry sidecars
+# Sample #2 - Supply buildpack for Cloud Foundry sidecars
 
 Cloud Foundry sidecars are an additional process running inside your application container (see [blog post](https://www.cloudfoundry.org/blog/how-to-push-an-app-to-cloud-foundry-with-sidecars/)). Cloud Foundry buildpacks allow the installation of additional software within your application container.
 
-In this sample project, we use a buildpack to create a dummy executable `config-server`, and the application runs it as a sidecar.
+In this sample project, we use a buildpack to install a pre-compiled executable `config-server`, which is run within the  application container as a sidecar.
 
 Run through the demonstration below, and then see the highlights of parts of this repo/buildpack.
 
@@ -13,10 +13,9 @@ This demonstration of sidecars requires a Cloud Foundry running [capi-release](h
 ## Demonstration
 
 ```plain
-cd fixtures/rubyapp
 cf v3-create-app app-using-config-server
-cf v3-apply-manifest -f manifest.yml
-cf v3-push app-using-config-server
+cf v3-apply-manifest -f fixtures/rubyapp/manifest.yml
+cf v3-push app-using-config-server -p fixtures/rubyapp
 ```
 
 If you view the logs you'll see the sidecar's output and the ruby app's output:
