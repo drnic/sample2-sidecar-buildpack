@@ -1,20 +1,19 @@
 #!/bin/bash
 
+set -eu
+
 echo "-----> Installing config-server buildpack"
 
 BUILD_DIR=$1
 CACHE_DIR=$2
 ENV_DIR=$3
+buildpack=$(cd "$(dirname $0)/.." && pwd)
+cd $buildpack
 
 echo "       \$BUILD_DIR: $BUILD_DIR"
 echo "       \$CACHE_DIR: $CACHE_DIR"
 echo "       \$ENV_DIR: $ENV_DIR"
+echo "       .downloadurl: $(cat .downloadurl)"
 
-cat > $BUILD_DIR/config-server <<-SHELL
-#!/bin/bash
-
-echo "Starting dummy config-server..."
-tail -f /dev/null
-SHELL
-
+curl -sSf $(cat .downloadurl) -o $BUILD_DIR/config-server
 chmod +x $BUILD_DIR/config-server
