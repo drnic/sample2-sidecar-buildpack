@@ -34,9 +34,11 @@ $ cf logs app-using-config-server --recent
 
 ## Highlights
 
-This project is first-and-foremostly a supply buildpack, which also includes an application for dev/testing/demonstration.
+Like [sample1-sidecar-buildpack](https://github.com/drnic/sample2-sidecar-buildpack), this project is first-and-foremostly a supply buildpack, which also includes an application for dev/testing/demonstration. 
 
-A supply buildpack can be used in addition to a normal buildpack to inject additional software/libraries/executables/files into the application droplet and runtime containers.
+Unlike sample1, this project also includes the source code for [`config-server`](src/config-server-sidecar), as well as a script for compilation and storing to an AWS S3 bucket ([`scripts/build_and_upload.sh`](scripts/build_and_upload.sh)).
+
+A supply buildpack can be used in addition to a normal buildpack to inject additional software/libraries/executables/files into the application droplet and runtime containers. This buildpack injects a pre-compiled executable `config-server` into the application droplet, which can then be run as a sidecar by the application.
 
 A supply buildpack needs:
 
@@ -47,22 +49,59 @@ Our sample application's `manifest.yml` specifies this buildpack as the first in
 
 ```yaml
   buildpacks:
-  - https://github.com/drnic/sample1-sidecar-buildpack
+  - https://github.com/drnic/sample2-sidecar-buildpack
   - ruby_buildpack
 ```
 
 The `bin/supply` can create/install files into a specific folder. This folder is provided as the first argument when `bin/supply` is executed during staging.
 
-In our `bin/supply` script we stored this first argument in the `$BUILD_DIR` environment variable; which is a more meaningful name than `$1`.
+In sample1 we created a silly executable, but in sample2 we are downloading a pre-compiled executable from the Internet. We've stored the URL in [`.downloadurl`](.downloadurl) file.
 
-```bash
-BUILD_DIR=$1
+```shell
+curl -sSf $(cat .downloadurl) -o $BUILD_DIR/config-server
+chmod +x $BUILD_DIR/config-server
 ```
 
-Our silly demonstration buildpack created a silly demonstration script `config-server`, and set it as an executable (`chmod +x`). Our application cannot interact with this silly sidecar; because its just silliness.
+In order for this file to exist on the Internet, we added [`scripts/build_and_upload.sh`](scripts/build_and_upload.sh). It builds the Golang project for a 64-bit Linux architecture (to match the Linux containers used by Cloud Foundry).
 
-In our next sample buildpack we will package up some real software that our application can interact with.
+```shell
+cd src/config-server-sidecar
+GOOS=linux GOARCH=amd64 go build -o "config-server-v${VERSION}" .
+```
+
+It uploads the artifact to an S3 bucket:
+
+```shell
+aws s3 cp \
+  "src/config-server-sidecar/config-server-v${VERSION}" \
+  "s3://${BUCKET}/config-server-sidecar/"
+```
+
+Finally, it updates the `.downloadurl` file in the buildpack repo so that the `bin/supply` staging command knowns how to fetch the pre-compiled binary.
+
+The S3 bucket has been made read-only for all files, so that anyone can use this buildpack.
+
+![read-only](https://cl.ly/e7f534258b41/public-read-only-bucket.png)
+
+```json
+{
+    "Version": "2008-10-17",
+    "Statement": [
+        {
+            "Sid": "AllowPublicRead",
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": "*"
+            },
+            "Action": "s3:GetObject",
+            "Resource": "arn:aws:s3:::sample1-sidecar-buildpack/*"
+        }
+    ]
+}
+```
 
 ## Thanks
 
 The sample app in `fixtures/rubyapp` and its example of running a fictional `config-server` sidecar originate from https://github.com/cloudfoundry-samples/capi-sidecar-samples/tree/master/sidecar-dependent-app.
+
+The `config-server` executable also comes from the same repo at https://github.com/cloudfoundry-samples/capi-sidecar-samples/tree/master/config-server-sidecar.
