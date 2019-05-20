@@ -17,11 +17,11 @@ class AppServer < Sinatra::Base
     response = Typhoeus.get("localhost:#{ENV['CONFIG_SERVER_PORT']}/config/")
     if response.body.size > 0
       puts "Received #{response.body} from the config-server sidecar"
+      STDOUT.flush
       response.body
     else
       {"error": "error connecting to local config-server"}.to_json
     end
-    STDOUT.flush
   end
 
   run! if app_file == $0
