@@ -34,7 +34,7 @@ $ cf logs app-using-config-server --recent
 
 **But does it blend?**
 
-If we interact with our main app we see that it can now communicate with its sidecar to get some secret configuration:
+If we interact with our main app we see that it can now communicate with its sidecar to get some internally secret configuration.
 
 ```plain
 $ curl -k https://app-using-config-server.dev.cfdev.sh
@@ -42,6 +42,8 @@ Hi, I'm an app with a sidecar!
 $ curl -k https://app-using-config-server.dev.cfdev.sh/config
 {"Scope":"some-service.admin","Password":"not-a-real-p4$$w0rd"}
 ```
+
+Obviously this is a silly example. No one put hyphens in their passwords.
 
 ## Highlights
 
