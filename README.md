@@ -32,6 +32,17 @@ $ cf logs app-using-config-server --recent
 [APP/PROC/WEB/0] ERR [2019-05-18 02:53:35] INFO  WEBrick::HTTPServer#start: pid=16 port=8080
 ```
 
+**But does it blend?**
+
+If we interact with our main app we see that it can now communicate with its sidecar to get some secret configuration:
+
+```plain
+$ curl -k https://app-using-config-server.dev.cfdev.sh
+Hi, I'm an app with a sidecar!
+$ curl -k https://app-using-config-server.dev.cfdev.sh/config
+{"Scope":"some-service.admin","Password":"not-a-real-p4$$w0rd"}
+```
+
 ## Highlights
 
 Like [sample1-sidecar-buildpack](https://github.com/drnic/sample2-sidecar-buildpack), this project is first-and-foremostly a supply buildpack, which also includes an application for dev/testing/demonstration.
