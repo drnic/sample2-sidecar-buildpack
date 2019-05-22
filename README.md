@@ -47,7 +47,7 @@ Obviously this is a silly example. No one put hyphens in their passwords.
 
 ## Highlights
 
-Like [sample1-sidecar-buildpack](https://github.com/starkandwayne/part3-sidecar-buildpack), this project is first-and-foremostly a supply buildpack, which also includes an application for dev/testing/demonstration.
+Like [part2-sidecar-buildpack](https://github.com/starkandwayne/part2-sidecar-buildpack), this project is first-and-foremostly a supply buildpack, which also includes an application for dev/testing/demonstration.
 
 Unlike sample1, this project also includes the source code for [`config-server`](src/config-server-sidecar), as well as a script for compilation and storing to an AWS S3 bucket ([`scripts/build_and_upload.sh`](scripts/build_and_upload.sh)).
 
