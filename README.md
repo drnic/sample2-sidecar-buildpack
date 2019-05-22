@@ -1,4 +1,4 @@
-# Sample #2 - Supply buildpack for Cloud Foundry sidecars
+# Part 3 - Supply buildpack for Cloud Foundry sidecars
 
 Cloud Foundry sidecars are an additional process running inside your application container (see [blog post](https://www.cloudfoundry.org/blog/how-to-push-an-app-to-cloud-foundry-with-sidecars/)). Cloud Foundry buildpacks allow the installation of additional software within your application container.
 
@@ -45,7 +45,7 @@ $ curl -k https://app-using-config-server.dev.cfdev.sh/config
 
 ## Highlights
 
-Like [sample1-sidecar-buildpack](https://github.com/drnic/sample2-sidecar-buildpack), this project is first-and-foremostly a supply buildpack, which also includes an application for dev/testing/demonstration.
+Like [sample1-sidecar-buildpack](https://github.com/starkandwayne/part3-sidecar-buildpack), this project is first-and-foremostly a supply buildpack, which also includes an application for dev/testing/demonstration.
 
 Unlike sample1, this project also includes the source code for [`config-server`](src/config-server-sidecar), as well as a script for compilation and storing to an AWS S3 bucket ([`scripts/build_and_upload.sh`](scripts/build_and_upload.sh)).
 
@@ -60,7 +60,7 @@ Our sample application's `manifest.yml` specifies this buildpack as the first in
 
 ```yaml
   buildpacks:
-  - https://github.com/drnic/sample2-sidecar-buildpack
+  - https://github.com/starkandwayne/part3-sidecar-buildpack
   - ruby_buildpack
 ```
 
