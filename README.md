@@ -10,6 +10,8 @@ Run through the demonstration below, and then see the highlights of parts of thi
 
 This demonstration of sidecars requires a Cloud Foundry running [capi-release](https://github.com/cloudfoundry/capi-release) [`1.79.0`](https://github.com/cloudfoundry/capi-release/releases/tag/1.79.0) or greater (for example [cf-deployment v7.11.0](https://github.com/cloudfoundry/cf-deployment/releases/tag/v7.11.0) or higher).
 
+[CFDev](https://github.com/cloudfoundry-incubator/cfdev) deploys a version of Cloud Foundry that supports Sidecars.
+
 ## Demonstration
 
 ```plain
