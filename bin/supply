@@ -2,10 +2,11 @@
 
 set -eu
 
+# see https://docs.cloudfoundry.org/buildpacks/understand-buildpacks.html#supply-script
 BUILD_DIR=$1
 CACHE_DIR=$2
-ENV_DIR=$3
-PROFILED_DIR=$4
+DEPS_DIR=$3
+BUILDPACK_INDEX=$4
 
 buildpack=$(cd "$(dirname $0)/.." && pwd)
 cd $buildpack
@@ -13,8 +14,8 @@ cd $buildpack
 echo "-----> Installing config-server v$(cat .version)"
 echo "       BUILD_DIR: $BUILD_DIR"
 echo "       CACHE_DIR: $CACHE_DIR"
-echo "       ENV_DIR: $ENV_DIR"
-echo "       PROFILED_DIR: $PROFILED_DIR"
+echo "       DEPS_DIR: $DEPS_DIR"
+echo "       BUILDPACK_INDEX: $BUILDPACK_INDEX"
 
 curl -sSf $(cat .downloadurl) -o $BUILD_DIR/config-server
 chmod +x $BUILD_DIR/config-server
